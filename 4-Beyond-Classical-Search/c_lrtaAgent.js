@@ -11,13 +11,13 @@ var LrtaAgentProblemStatement = function(){
 
 	this.at = function(i,j){
 		return i * this.COLS + j;
-	}
+	};
 	this.getIJ = function(x){
 		return [parseInt(x/this.COLS),x%this.COLS];
-	}
+	};
 	this.goal_test = function(state){
 		return this.END == state;
-	}
+	};
 	// Get all possible actions
 	this.actions = function(state){
 		var a = [this.NO_ACTION];
@@ -27,7 +27,7 @@ var LrtaAgentProblemStatement = function(){
 		if(j - 1 >= 0 && !this.graph[i][j-1]) a.push(this.LEFT);
 		if(j + 1 < this.COLS && !this.graph[i][j+1]) a.push(this.RIGHT);
 		return a;
-	}
+	};
 	// Get state resulting from action taken
 	this.getNextState = function(state,action){
 		var x = this.getIJ(state)[0];
@@ -40,7 +40,7 @@ var LrtaAgentProblemStatement = function(){
 			case this.RIGHT = 4: y++; break;
 		}
 		return this.at(x,y);
-	}
+	};
 
 	///////////////////////////////////////////////////
 	////// TODO: PUT IN SUPER CLASS (END)
@@ -58,7 +58,7 @@ var LrtaAgentProblemStatement = function(){
 		this.TOTAL_STATES = this.ROWS * this.COLS;
 		this.INITIAL = 0;
 		this.END = 12;
-	}
+	};
 
 	this.init();
 
@@ -70,14 +70,14 @@ var LrtaAgentProblemStatement = function(){
 		var y = Math.abs(current[1]-goal[1]);
 		console.log("Manhattan (%d+%d)",x,y);
 		return x+y;
-	}
+	};
 
 	// Binary manhattan weights
 	this.cost = function(state,action,newState){
 		if(action == 0) return 0;
 		else return 1;
-	}
-}
+	};
+};
 
 var problem = new LrtaAgentProblemStatement();
 var state = problem.INITIAL;
@@ -90,11 +90,5 @@ function step(){
 }
 
 $(document).ready(function(){
-	$.ajax({
-		url : "lrtaAgent.js",
-		dataType: "text",
-		success : function (data) {
-			$("#lrtaCode").html(data);
-		}
-	});
+
 });

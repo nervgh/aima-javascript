@@ -25,7 +25,7 @@ var ArcConsistency = function(){
 			}
 		}
 		return true;
-	}
+	};
 	this.revise = function(csp,xi,xj){
 		revised = false;
 
@@ -54,5 +54,5 @@ var ArcConsistency = function(){
 			}
 		}
 		return revised;
-	}
-}
+	};
+};

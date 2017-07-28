@@ -12,13 +12,13 @@ var OnlineDfsAgentProblemStatement = function(){
 
 	this.at = function(i,j){
 		return i * this.COLS + j;
-	}
+	};
 	this.getIJ = function(x){
 		return [parseInt(x/this.COLS),x%this.COLS];
-	}
+	};
 	this.goal_test = function(state){
 		return this.END == state;
-	}
+	};
 	// Get all possible actions
 	this.actions = function(state){
 		var a = [this.NO_ACTION];
@@ -28,7 +28,7 @@ var OnlineDfsAgentProblemStatement = function(){
 		if(j - 1 >= 0 && !this.graph[i][j-1]) a.push(this.LEFT);
 		if(j + 1 < this.COLS && !this.graph[i][j+1]) a.push(this.RIGHT);
 		return a;
-	}
+	};
 	// Get state resulting from action taken
 	this.getNextState = function(state,action){
 		var x = this.getIJ(state)[0];
@@ -41,7 +41,7 @@ var OnlineDfsAgentProblemStatement = function(){
 			case this.RIGHT = 4: y++; break;
 		}
 		return this.at(x,y);
-	}
+	};
 
 	///////////////////////////////////////////////////
 	////// TODO: PUT IN SUPER CLASS (END)
@@ -61,18 +61,11 @@ var OnlineDfsAgentProblemStatement = function(){
 		this.TOTAL_STATES = this.ROWS * this.COLS;
 		this.INITIAL = 0;
 		this.END = 19;
-	}
+	};
 	this.init();
-}
+};
 
 $(document).ready(function(){
-	$.ajax({
-		url : "onlineDfsAgent.js",
-		dataType: "text",
-		success : function (data) {
-			$("#onlineDfsCode").html(data);
-		}
-	});
 
 	var two;
 	var canvas;

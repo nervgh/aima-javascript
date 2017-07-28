@@ -46,5 +46,5 @@ var OnlineDfsAgent = function(problem){
 		}
 		this.s = newState;
 		return this.a;
-	}
-}
+	};
+};

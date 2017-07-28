@@ -19,7 +19,7 @@ var AndOrGraphSearch = function(){
 				return plan.unshift(action);
 		}
 		return null;
-	}
+	};
 
 	this.andSearch = function(states,problem,path){
 		var plans = [];
@@ -29,8 +29,8 @@ var AndOrGraphSearch = function(){
 				return null;
 		}
 		return plans;
-	}
+	};
 	this.search = function(problem){
 		return this.orSearch(problem.INITIAL_STATE,problem,[]);
-	}
-}
+	};
+};

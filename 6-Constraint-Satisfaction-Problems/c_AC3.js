@@ -35,8 +35,8 @@ var AC3CSP = function(){
 		return x != y;
 		if(xi == 3 && xj == 2)
 		return y != x;
-	}
-}
+	};
+};
 
 var ac3 = new ArcConsistency();
 var ac3csp = new AC3CSP();
@@ -146,7 +146,7 @@ $(document).ready(function(){
 							two.makeText(""+ac3csp.varNames[i],SIZE/4,y,'normal');
 							for(var j = 0; j < domainsCopy[i].length; j++){
 								var x = j * SIZE + SIZE;
-								cells[i][j] = two.makeRectangle(x,y,SIZE,SIZE);;
+								cells[i][j] = two.makeRectangle(x,y,SIZE,SIZE);
 								cells[i][j].stroke = "#3333dd";
 								two.makeText(""+domainsCopy[i][j],x,y,'normal');
 							}

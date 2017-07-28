@@ -51,11 +51,11 @@ var LrtaAgent = function(problem){
 		this.s = newState;
 		this.a = a;
 		return a;
-	}
+	};
 	this.lrtaCost = function(state,action,newState){
 		if(this.H[newState] == null)
 		return this.problem.h(state);
 		else
 		return this.problem.cost(state,action,newState) + this.H[newState];
-	}
-}
+	};
+};

@@ -6,12 +6,12 @@ var AndOrGraphSearchProblemStatement = function(){
 		SUCK = 0;
 		LEFT = 1;
 		RIGHT = 2;
-	}
+	};
 	this.DIRT_PROBABILITY = 0.33;
 
 	this.goal_test = function(state){
 		return state == this.FINAL_STATE;
-	}
+	};
 	// See figure 4.9 page 134
 	this.actions = function(state){
 		var temp = [];
@@ -26,7 +26,7 @@ var AndOrGraphSearchProblemStatement = function(){
 		if(state == 2 || state == 4 || state == 6)
 		temp.push(ACTIONS.LEFT);
 		return temp;
-	}
+	};
 
 	this.results = function(state,action){
 		var states = [];
@@ -50,16 +50,9 @@ var AndOrGraphSearchProblemStatement = function(){
 			break;
 		}
 		return states;
-	}
-}
+	};
+};
 
 $(document).ready(function(){
-	$.ajax({
-		url : "andOrGraphSearch.js",
-		dataType: "text",
-		success : function (data) {
-			$("#andOrGraphSearchCode").html(data);
-		}
-	});
 
 });

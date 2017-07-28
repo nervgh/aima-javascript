@@ -20,7 +20,7 @@ var GeneticAlgorithm = function(fitnessFunction,mutationChance){
 			nextGen[i] = child;
 		}
 		return nextGen;
-	}
+	};
 	this.calculateFitness = function(gen,f){
 		this.fitness = new Array(gen.length);
 		this.fitnessSum = 0;
@@ -35,7 +35,7 @@ var GeneticAlgorithm = function(fitnessFunction,mutationChance){
 				this.alphaIndex = i;
 			}
 		}
-	}
+	};
 	this.randomSelection = function(gen){
 		// Randomly choose an individual
 		var value = Math.random() * this.fitnessSum;
@@ -44,7 +44,7 @@ var GeneticAlgorithm = function(fitnessFunction,mutationChance){
 			if (value <= 0.0)
 			return gen[i];
 		}
-	}
+	};
 	this.reproduce = function(parent1,parent2){
 		child = new Array(parent1.length);
 		// Randomly choose the point of crossover
@@ -54,14 +54,14 @@ var GeneticAlgorithm = function(fitnessFunction,mutationChance){
 		for(var i = point; i < child.length; i++)
 			child[i] = parent2[i];
 		return child;
-	}
+	};
 	this.mutate = function(child){
 		var point = parseInt(Math.random() * child.length);
 		var value = parseInt(Math.random() * 15);
 		child[point] = value.toString(16);
 		return child;
-	}
+	};
 	this.getAlpha = function(gen){
 		return gen[this.alphaIndex];
-	}
-}
+	};
+};
