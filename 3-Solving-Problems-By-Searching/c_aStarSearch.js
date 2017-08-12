@@ -45,7 +45,7 @@ new Vue({
 
     aima.delay = 2000 // ms
 
-    // It should color this node
+    // It should color this node as "next" one
     aima.graphProblem.nodes['A'].state = 'next'
 
     console.log('aStarSearch:aima', aima)
@@ -124,7 +124,7 @@ function toArray (obj) {
 }
 /**
  * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description
- * @param {Strnig} str1
+ * @param {String} str1
  * @param {String} str2
  * @return {Number}
  */
