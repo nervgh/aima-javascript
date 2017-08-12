@@ -2,37 +2,42 @@
 <html lang="en">
 
 <head>
+  <meta charset="utf-8">
   <title>3 Solving Problems By Searching</title>
   <link rel="stylesheet" href="../styles.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-  <script type="text/javascript" src="../main.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/two.js/0.6.0/two.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.min.js"></script>
-
-  <script type="text/javascript" src="./helpers.js"></script>
-  <script type="text/javascript" src="./gitter-grid.js"></script>
-  <script type="text/javascript" src="./aStarSearch.js"></script>
-  <script type="text/javascript" src="./bestFirstSearch.js"></script>
-  <script type="text/javascript" src="./breadthFirstSearch.js"></script>
-  <script type="text/javascript" src="./depthFirstSearch.js"></script>
-  <script type="text/javascript" src="./depthLimitedSearch.js"></script>
-  <script type="text/javascript" src="./iterativeDeepening.js"></script>
-  <script type="text/javascript" src="./uniformCostSearch.js"></script>
-  <script type="text/javascript" src="./costDetails.js"></script>
-  <script type="text/javascript" src="./bi-directional.js"></script>
-
-  <script type="text/javascript" src="./c_aStarSearch.js"></script>
-  <script type="text/javascript" src="./c_bestFirstSearch.js"></script>
-  <script type="text/javascript" src="./c_breadthFirstSearch.js"></script>
-  <script type="text/javascript" src="./c_depthFirstSearch.js"></script>
-  <script type="text/javascript" src="./c_depthLimitedSearch.js"></script>
-  <script type="text/javascript" src="./c_iterativeDeepening.js"></script>
-  <script type="text/javascript" src="./c_uniformCostSearch.js"></script>
-  <script type="text/javascript" src="./c_nodeExpansion.js"></script>
-  <script type="text/javascript" src="./c_costDetails.js"></script>
-  <script type="text/javascript" src="./c_bi-directional.js"></script>
-
+  <style>
+    .explanation-container {
+      padding: 10px;
+      width: 100%;
+      height: 100%;
+      margin-top: 40px;
+      min-height: 200px;
+    }
+    .explanation-area {
+      background-color: hsl(0, 0%, 90%);
+    }
+    .graph-nodes-container {
+      list-style-type: none;
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+    }
+    .graph-node {
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+      background-color: hsl(0, 2%, 76%);
+      border: 1px solid black;
+      text-align: center;
+      line-height: 30px;
+      display: inline-block;
+    }
+    .legend-item {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+    }
+  </style>
 </head>
 
 <body>
@@ -63,14 +68,15 @@
           <div class="notes">
             <ul type="none" id='nodeLegend'>
               <li>
-                <div id='legendExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='legendExpanded' class="legend-item"></i> Expanded Nodes </li>
               <li>
-                <div id='legendFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='legendFrontier' class="legend-item"></i> Frontier Nodes </li>
               <li>
-                <div id='legendUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='legendUnexplored' class="legend-item"></i>Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
-          <div id="frontierNodesWrapper" style="background-color:hsl(0, 0%, 90%);padding:10px; width:50%;height:200px;margin-top:40px">
+          <div id="frontierNodesWrapper" class="explanation-container">
             <center>
               <h4>Frontier Nodes</h4>
               <div id='frontierCanvas'>
@@ -121,12 +127,14 @@
           <div class="notes">
             <ul type="none" id='fifoLegend'>
               <li>
-                <div id='fifoWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='fifoWaiting' class="legend-item"></i> Nodes waiting to be expanded
+              </li>
               <li>
-                <div id='fifoNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <l id='fifoNextNode' class="legend-item"></l> Node to be expanded next from the queue
+              </li>
             </ul>
           </div>
-          <div id="fifoQueueWrapper" style="background-color:hsl(0, 0%, 90%);padding:10px; width:70%;height:100px;margin-top:40px">
+          <div id="fifoQueueWrapper" class="explanation-container">
             <center>
               <h4>FIFO Queue</h4>
               <div id='fifoQueueCanvas'>
@@ -155,12 +163,13 @@
           <div class="notes">
             <ul type="none" id='lifoLegend'>
               <li>
-                <div id='lifoWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='lifoWaiting' class="legend-item"></i> Nodes waiting to be expanded </li>
               <li>
-                <div id='lifoNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <i id='lifoNextNode' class="legend-item"></i> Node to be expanded next from the queue
+              </li>
             </ul>
           </div>
-          <div id="lifoQueueWrapper" style="background-color:hsl(0, 0%, 90%);padding:10px; width:70%;height:100px;margin-top:40px">
+          <div id="lifoQueueWrapper" class="explanation-container">
             <center>
               <h4>LIFO Queue</h4>
               <div id='lifoQueueCanvas'>
@@ -203,7 +212,7 @@
       </div>
       <div class='row'>
         <div class="col-sm-6 col-md-6">
-          <div style="background-color:hsl(0, 0%, 90%);padding:10px; width:100%;height:170px;margin-top:40px">
+          <div class="explanation-container">
             <center>
               <h4>Lowest Cost Path</h4>
               <h5>Uniform Cost Search (Extension of BFS)</h5>
@@ -213,7 +222,7 @@
           </div>
         </div>
         <div class="col-sm-6 col-md-6">
-          <div style="background-color:hsl(0, 0%, 90%);padding:10px; width:100%;height:170px;margin-top:40px">
+          <div class="explanation-container">
             <center>
               <h4>BFS Shortest Path</h4>
               <h5>Breadth First Search</h5>
@@ -248,17 +257,19 @@
           <div class="notes">
             <ul type="none" id='ucsLegend'>
               <li>
-                <div id='ucsWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='ucsWaiting' class="legend-item"></i> Nodes waiting to be expanded
+              </li>
               <li>
-                <div id='ucsNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <i id='ucsNextNode' class="legend-item"></i> Node to be expanded next from the queue
+              </li>
               <li>
-                <div id='ucsExploredNode' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes</li>
-
+                <i id='ucsExploredNode' class="legend-item"></i> Expanded Nodes
+              </li>
             </ul>
           </div>
           <div class="row">
             <div class="col-md-6 col-xs-12 col-lg-6">
-              <div id="priorityQueueWrapper" style="background-color:hsl(0, 0%, 90%);padding:10px; width:100%;height:300px;margin-top:40px">
+              <div id="priorityQueueWrapper" class="explanation-container">
                 <center>
                   <h4>Priority Queue</h4>
                   <h4> costs >= <span class = 'ucsSeparation' style="font-size:150%;color:green">0</span></h4>
@@ -268,7 +279,7 @@
               </div>
             </div>
             <div class="col-md-6 col-xs-12 col-lg-6">
-              <div id="ExploredPriorityQueueWrapper" style="background-color:hsl(0, 0%, 90%);padding:10px; width:100%;height:300px;margin-top:40px">
+              <div id="ExploredPriorityQueueWrapper" class="explanation-container">
                 <center>
                   <h4>Explored Nodes</h4>
                   <h4> costs <= <span class = 'ucsSeparation' style="font-size:150%;color:green">0</span></h4>
@@ -314,11 +325,14 @@
           <div class="notes">
             <ul type="none" id='dlsLegend'>
               <li>
-                <div id='dlsExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='dlsExpanded' class="legend-item"></i> Expanded Nodes
+              </li>
               <li>
-                <div id='dlsFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='dlsFrontier' class="legend-item"></i> Frontier Nodes
+              </li>
               <li>
-                <div id='dlsUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='dlsUnexplored' class="legend-item"></i> Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
         </div>
@@ -356,11 +370,14 @@
           <div class="notes">
             <ul type="none" id='idLegend'>
               <li>
-                <div id='idExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='idExpanded' class="legend-item"></i> Expanded Nodes
+              </li>
               <li>
-                <div id='idFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='idFrontier' class="legend-item"></i> Frontier Nodes
+              </li>
               <li>
-                <div id='idUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='idUnexplored' class="legend-item"></i> Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
         </div>
@@ -389,15 +406,189 @@
       </div>
 
 
-      <h2>A Star Search</h2>
-      <p>Click on the canvas to restart the simulation</p>
-      <div class="canvas" id="aStarSearchCanvas" height="300px" style="background: rgb(154, 255, 255);">
-      </div>
+      <div class="row" id="aStarSearchBox">
+        <h2>A Star Search</h2>
 
-      <pre id="aStarSearchCode"></pre>
+        <div class="row">
+          <div class="col-sm-6 col-md-6">
+            <div class="row">
+              <div class="col-sm-3 col-md-3">
+                <div class="form-group">
+                  <label>Start node</label>
+                  <select v-model="aima.graphProblem.initialKey"
+                          v-bind:disabled="aima.graphProblem.inProgress()"
+                          v-on:change="reset()"
+                          class="form-control">
+                    <option v-for="node in aima.graphProblem.nodes"
+                            v-bind:value="node.id"
+                            v-text="node.id">
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3">
+                <div class="form-group">
+                  <label>Goal node</label>
+                  <select v-model="aima.graphProblem.goalKey"
+                          v-bind:disabled="aima.graphProblem.inProgress()"
+                          v-on:change="reset()"
+                          class="form-control">
+                    <option v-for="node in aima.graphProblem.nodes"
+                            v-bind:value="node.id"
+                            v-text="node.id">
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="btn-toolbar" style="margin-left: 10px;">
+                <div class="btn-group">
+                  <button v-on:click="playOrPause()"
+                          type="button"
+                          class="btn btn-default">
+                      <i v-bind:class="{'glyphicon-pause': timerId, 'glyphicon-play': !timerId}"
+                         class="glyphicon"></i>
+                  </button>
+                  <button v-bind:disabled="aima.graphProblem.isSolved()"
+                          v-on:click="next()"
+                          type="button"
+                          class="btn btn-default">
+                    <i class="glyphicon glyphicon-step-forward"></i>
+                  </button>
+                </div>
+                <div class="btn-group">
+                  <button v-on:click="reset()"
+                          type="button"
+                          class="btn btn-default">
+                    <i class="glyphicon glyphicon-repeat"></i>
+                  </button>
+                </div>
+              </div>
+              <p v-show="aima.graphProblem.isSolved()">
+                <br>
+                <strong>This problem is solved. Next node which will be expanded is the goal node.</strong>
+              </p>
+              <div class="canvas" id="aStarSearchCanvas" style="height: 300px;"></div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="notes">
+              <ul type="none">
+                <li>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.frontier.fill}"
+                     class="legend-item"></l>
+                  Nodes waiting to be expanded
+                </li>
+                <li>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.next.fill}"
+                     class="legend-item"></l>
+                  Node to be expanded next from the queue
+                </li>
+                <li>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.explored.fill}"
+                     class="legend-item"></l>
+                  Expanded Nodes
+                </li>
+              </ul>
+            </div>
+            <div class="row explanation-area">
+              <div class="explanation-container" style="margin-top: 0; min-height: auto;">
+                <h4 class="text-center">Path</h4>
+                <ul class="graph-nodes-container">
+                  <li v-for="node in getPathNodes(aima.graphProblem)"
+                      v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                      class="graph-node pull-left"
+                      style="margin: 16px 16px 0 0;"
+                      v-text="node.id">
+                  </li>
+                </ul>
+              </div>
+              <h4 class="text-center">Priority Queue (Frontier)</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Node</th>
+                    <th>f(n)=g(n)+h(n)</th>
+                    <th>g(n)</th>
+                    <th>h(n)</th>
+                    <th>Depth</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="node in frontierNodes(aima.graphProblem)">
+                    <td><span v-text="node.id"
+                              v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                              class="graph-node"></span></td>
+                    <td><span v-text="node.totalCost"></span></td>
+                    <td><span v-text="node.cost"></span></td>
+                    <td><span v-text="node.estimatedCost"></span></td>
+                    <td><span v-text="node.depth"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="col-xs-6">
+                <div class="explanation-container">
+                  <h4 class="text-center">Unexplored Nodes</h4>
+                  <ul class="graph-nodes-container">
+                    <li v-for="node in unexploredNodes(aima.graphProblem)"
+                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                        class="graph-node pull-left"
+                        style="margin: 16px 16px 0 0;">
+                      <span v-text="node.text"></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="explanation-container">
+                  <h4 class="text-center">Explored Nodes</h4>
+                  <ul class="graph-nodes-container">
+                    <li v-for="node in exploredNodes(aima.graphProblem)"
+                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                        class="graph-node pull-left"
+                        style="margin: 16px 16px 0 0;">
+                      <span v-text="node.text"></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  </div>
-</body>
 
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="../main.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/two.js/0.6.0/two.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js"></script>
+
+  <script src="./helpers.js"></script>
+  <script src="./gitter-grid.js"></script>
+  <script src="./aStarSearch.js"></script>
+  <script src="./bestFirstSearch.js"></script>
+  <script src="./breadthFirstSearch.js"></script>
+  <script src="./depthFirstSearch.js"></script>
+  <script src="./depthLimitedSearch.js"></script>
+  <script src="./iterativeDeepening.js"></script>
+  <script src="./uniformCostSearch.js"></script>
+  <script src="./costDetails.js"></script>
+  <script src="./bi-directional.js"></script>
+
+  <script src="./c_aStarSearch.js"></script>
+  <script src="./c_bestFirstSearch.js"></script>
+  <script src="./c_breadthFirstSearch.js"></script>
+  <script src="./c_depthFirstSearch.js"></script>
+  <script src="./c_depthLimitedSearch.js"></script>
+  <script src="./c_iterativeDeepening.js"></script>
+  <script src="./c_uniformCostSearch.js"></script>
+  <script src="./c_nodeExpansion.js"></script>
+  <script src="./c_costDetails.js"></script>
+  <script src="./c_bi-directional.js"></script>
+</body>
 </html>
