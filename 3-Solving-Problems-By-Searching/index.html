@@ -20,14 +20,14 @@
       height: 100%;
     }
     .graph-node {
-      width: 30px;
-      height: 30px;
-      border-radius: 15px;
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
       background-color: hsl(0, 2%, 76%);
       border: 1px solid black;
-      margin: 10px 10px 0 0;
+      margin: 12px 12px 0 0;
       text-align: center;
-      line-height: 28px;
+      line-height: 30px;
       float: left;
     }
   </style>
@@ -419,21 +419,23 @@
                 <div class="explanation-container">
                   <h4 class="text-center">Unexplored Nodes</h4>
                   <ul class="graph-nodes-container">
-                    <li class="graph-node">1</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
+                    <li v-for="node in unexploredNodes(aima.graphProblem)"
+                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                        class="graph-node">
+                      <span v-text="node.text"></span>
+                    </li>
                   </ul>
                 </div>
               </div>
               <div class="col-xs-3">
                 <div class="explanation-container">
-                  <h4 class="text-center">Priority Queue</h4>
+                  <h4 class="text-center">Priority Queue (Frontier)</h4>
                   <ul class="graph-nodes-container">
-                    <li class="graph-node">1</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
+                    <li v-for="node in frontierNodes(aima.graphProblem)"
+                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                        class="graph-node">
+                      <span v-text="node.text"></span>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -441,10 +443,11 @@
                 <div class="explanation-container">
                   <h4 class="text-center">Explored Nodes</h4>
                   <ul class="graph-nodes-container">
-                    <li class="graph-node">1</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
-                    <li class="graph-node">2</li>
+                    <li v-for="node in exploredNodes(aima.graphProblem)"
+                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                        class="graph-node">
+                      <span v-text="node.text"></span>
+                    </li>
                   </ul>
                 </div>
               </div>

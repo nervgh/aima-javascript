@@ -5,7 +5,6 @@
 
 /* global Vue */
 /* global DefaultGraph */
-/* global precomputedCosts */
 /* global GraphProblem */
 /* global GraphAgent */
 /* global DefaultOptions */
@@ -13,7 +12,7 @@
 
 new Vue({
   el: '#aStarSearchBox',
-  mounted: function () {
+  data: function () {
     // namespace
     var aima = {}
 
@@ -25,8 +24,6 @@ new Vue({
       'A',
       'A'
     )
-    // Precompute costs of all nodes from the initial node
-    aima.costMap = precomputedCosts()
 
     aima.graphAgent = new GraphAgent(aima.graphProblem, 'a*-search')
     aima.options = new DefaultOptions()
@@ -48,21 +45,95 @@ new Vue({
 
     aima.delay = 2000 // ms
 
-    this.aima = aima
+    // It should color this node
+    aima.graphProblem.nodes['A'].state = 'next'
 
-    console.log('aStarSearch', aima)
+    console.log('aStarSearch:aima', aima)
+
+    return {
+      aima: aima
+    }
   },
-  computed: {
-    // TODO: need implement
-    priorityQueue: function () {
-      var aima = this.aima
-      return // {Array}
+  methods: {
+    /**
+     * @param {GraphProblem} graphProblem
+     * @return {Array.<Object>}
+     */
+    unexploredNodes: function (graphProblem) {
+      return toArray(graphProblem.nodes)
+        .filter(function (node) {
+          return node.state === 'unexplored'
+        })
+        .sort(function (nodeA, nodeB) {
+          return compareStrings(nodeA.text, nodeB.text)
+        })
     },
-    // TODO: need implement
-    exploredNodes: function () {
-      var aima = this.aima
-      return // {Array}
+    /**
+     * @param {GraphProblem} graphProblem
+     * @return {Array.<Object>}
+     */
+    frontierNodes: function (graphProblem) {
+      return toArray(graphProblem.nodes)
+        .filter(function (node) {
+          return node.state === 'frontier' || node.state === 'next'
+        })
+        .sort(function (nodeA, nodeB) {
+          return compareStrings(nodeA.text, nodeB.text)
+        })
+    },
+    /**
+     * @param {GraphProblem} graphProblem
+     * @return {Array.<Object>}
+     */
+    exploredNodes: function (graphProblem) {
+      return toArray(graphProblem.nodes)
+        .filter(function (node) {
+          return node.state === 'explored'
+        })
+        .sort(function (nodeA, nodeB) {
+          return compareStrings(nodeA.text, nodeB.text)
+        })
+    },
+    /**
+     * @param {GraphProblem} graphProblem
+     * @param {DefaultOptions} options
+     * @param {GraphNode} node
+     * @return {{backgroundColor: string}}
+     */
+    getNodeStyle: function (graphProblem, options, node) {
+      return {
+        backgroundColor: options.nodes[node.state].fill
+      }
     }
   }
-
 })
+
+/**
+ * Turns an object to an array of objects
+ * @param {Object} obj
+ * @return {Array.<Object>}
+ */
+function toArray (obj) {
+  var stack = []
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      stack.push(obj[key])
+    }
+  }
+  return stack
+}
+/**
+ * @see https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Description
+ * @param {Strnig} str1
+ * @param {String} str2
+ * @return {Number}
+ */
+function compareStrings (str1, str2) {
+  if (str1 <= str2) {
+    return -1
+  }
+  if (str1 > str2) {
+    return 1
+  }
+  return 0
+}
