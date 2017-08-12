@@ -30,6 +30,11 @@
       line-height: 30px;
       float: left;
     }
+    .legend-item {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+    }
   </style>
 </head>
 
@@ -61,11 +66,12 @@
           <div class="notes">
             <ul type="none" id='nodeLegend'>
               <li>
-                <div id='legendExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='legendExpanded' class="legend-item"></i> Expanded Nodes </li>
               <li>
-                <div id='legendFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='legendFrontier' class="legend-item"></i> Frontier Nodes </li>
               <li>
-                <div id='legendUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='legendUnexplored' class="legend-item"></i>Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
           <div id="frontierNodesWrapper" class="explanation-container">
@@ -119,9 +125,11 @@
           <div class="notes">
             <ul type="none" id='fifoLegend'>
               <li>
-                <div id='fifoWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='fifoWaiting' class="legend-item"></i> Nodes waiting to be expanded
+              </li>
               <li>
-                <div id='fifoNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <l id='fifoNextNode' class="legend-item"></l> Node to be expanded next from the queue
+              </li>
             </ul>
           </div>
           <div id="fifoQueueWrapper" class="explanation-container">
@@ -153,9 +161,10 @@
           <div class="notes">
             <ul type="none" id='lifoLegend'>
               <li>
-                <div id='lifoWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='lifoWaiting' class="legend-item"></i> Nodes waiting to be expanded </li>
               <li>
-                <div id='lifoNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <i id='lifoNextNode' class="legend-item"></i> Node to be expanded next from the queue
+              </li>
             </ul>
           </div>
           <div id="lifoQueueWrapper" class="explanation-container">
@@ -246,12 +255,14 @@
           <div class="notes">
             <ul type="none" id='ucsLegend'>
               <li>
-                <div id='ucsWaiting' style="width:15px;height:15px;display: inline-block;"></div> Nodes waiting to be expanded </li>
+                <i id='ucsWaiting' class="legend-item"></i> Nodes waiting to be expanded
+              </li>
               <li>
-                <div id='ucsNextNode' style="width:15px;height:15px;display: inline-block;"></div> Node to be expanded next from the queue </li>
+                <i id='ucsNextNode' class="legend-item"></i> Node to be expanded next from the queue
+              </li>
               <li>
-                <div id='ucsExploredNode' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes</li>
-
+                <i id='ucsExploredNode' class="legend-item"></i> Expanded Nodes
+              </li>
             </ul>
           </div>
           <div class="row">
@@ -312,11 +323,14 @@
           <div class="notes">
             <ul type="none" id='dlsLegend'>
               <li>
-                <div id='dlsExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='dlsExpanded' class="legend-item"></i> Expanded Nodes
+              </li>
               <li>
-                <div id='dlsFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='dlsFrontier' class="legend-item"></i> Frontier Nodes
+              </li>
               <li>
-                <div id='dlsUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='dlsUnexplored' class="legend-item"></i> Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
         </div>
@@ -354,11 +368,14 @@
           <div class="notes">
             <ul type="none" id='idLegend'>
               <li>
-                <div id='idExpanded' style="width:15px;height:15px;display: inline-block;"></div> Expanded Nodes </li>
+                <i id='idExpanded' class="legend-item"></i> Expanded Nodes
+              </li>
               <li>
-                <div id='idFrontier' style="width:15px;height:15px;display: inline-block;"></div> Frontier Nodes </li>
+                <i id='idFrontier' class="legend-item"></i> Frontier Nodes
+              </li>
               <li>
-                <div id='idUnexplored' style="width:15px;height:15px;display: inline-block;"></div> Unexplored/Unknown Nodes </li>
+                <i id='idUnexplored' class="legend-item"></i> Unexplored/Unknown Nodes
+              </li>
             </ul>
           </div>
         </div>
@@ -401,15 +418,18 @@
             <div class="notes">
               <ul type="none">
                 <li>
-                  <div style="width:15px;height:15px;display: inline-block;"></div>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.frontier.fill}"
+                     class="legend-item"></l>
                   Nodes waiting to be expanded
                 </li>
                 <li>
-                  <div style="width:15px;height:15px;display: inline-block;"></div>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.next.fill}"
+                     class="legend-item"></l>
                   Node to be expanded next from the queue
                 </li>
                 <li>
-                  <div style="width:15px;height:15px;display: inline-block;"></div>
+                  <l v-bind:style="{backgroundColor: aima.options.nodes.explored.fill}"
+                     class="legend-item"></l>
                   Expanded Nodes
                 </li>
               </ul>
