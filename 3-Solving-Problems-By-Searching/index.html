@@ -18,6 +18,7 @@
       list-style-type: none;
       padding: 0;
       height: 100%;
+      overflow: auto;
     }
     .graph-node {
       width: 32px;
@@ -28,7 +29,6 @@
       margin: 12px 12px 0 0;
       text-align: center;
       line-height: 30px;
-      float: left;
     }
     .legend-item {
       width: 15px;
@@ -441,7 +441,7 @@
                   <ul class="graph-nodes-container">
                     <li v-for="node in unexploredNodes(aima.graphProblem)"
                         v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                        class="graph-node">
+                        class="graph-node pull-left">
                       <span v-text="node.text"></span>
                     </li>
                   </ul>
@@ -453,7 +453,7 @@
                   <ul class="graph-nodes-container">
                     <li v-for="node in frontierNodes(aima.graphProblem)"
                         v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                        class="graph-node">
+                        class="graph-node pull-left">
                       <span v-text="node.text"></span>
                     </li>
                   </ul>
@@ -465,7 +465,7 @@
                   <ul class="graph-nodes-container">
                     <li v-for="node in exploredNodes(aima.graphProblem)"
                         v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                        class="graph-node">
+                        class="graph-node pull-left">
                       <span v-text="node.text"></span>
                     </li>
                   </ul>
