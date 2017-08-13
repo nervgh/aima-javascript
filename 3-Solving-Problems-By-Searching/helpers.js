@@ -6,6 +6,7 @@ var GraphNode = function(x, y, id, text) {
   this.text = text;
   this.state = 'unexplored';
   this.cost = Number.POSITIVE_INFINITY;
+  this.totalCost = Number.POSITIVE_INFINITY; // It requires for the aStarSearch
   this.parent = null;
   this.depth = Number.POSITIVE_INFINITY;
 };

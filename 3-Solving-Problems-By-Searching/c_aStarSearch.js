@@ -5,8 +5,8 @@
 
 /* global Vue */
 /* global DefaultGraph */
-/* global GraphProblem */
-/* global GraphAgent */
+/* global GraphProblemAStarSearch */
+/* global GraphAgentAStarSearch */
 /* global DefaultOptions */
 /* global GraphDrawAgent */
 
@@ -52,7 +52,7 @@ window.vmAStarSearch = new Vue({
 
     // The default graph
     aima.graph = new DefaultGraph()
-    aima.graphProblem = new GraphProblem(
+    aima.graphProblem = new GraphProblemAStarSearch(
       aima.graph.nodes,
       aima.graph.edges,
       'A',
@@ -60,7 +60,7 @@ window.vmAStarSearch = new Vue({
       'O'
     )
 
-    // aima.graphAgent = new GraphAgent(aima.graphProblem, 'a*-search')
+    aima.graphAgent = new GraphAgentAStarSearch(aima.graphProblem)
     aima.options = new DefaultOptions()
     aima.options.nodes.next.fill = 'hsla(126, 100%, 69%, 1)'
     aima.options.edges.showCost = true
@@ -90,6 +90,18 @@ window.vmAStarSearch = new Vue({
     }
   },
   methods: {
+    /**
+     * It renders next "frame" of visualization
+     */
+    renderNext: function () {
+      var aima = this.aima
+      if (aima.graphProblem.isSolved()) {
+        return
+      }
+      var nextNodeKey = aima.graphProblem.frontier[0]
+      aima.graphAgent.expand(nextNodeKey)
+      // TODO: GraphDrawAgent.iterate() or something like this
+    },
     /**
      * @param {GraphProblem} graphProblem
      * @return {Array.<Object>}
