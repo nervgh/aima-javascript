@@ -52,18 +52,41 @@ window.vmAStarSearch = new Vue({
     console.log('aStarSearch:aima', aima)
 
     return {
-      aima: aima
+      aima: aima,
+      timerId: null
     }
   },
   methods: {
+    playOrPause: function () {
+      if (this.timerId) {
+        this.timerId = clearTimeout(this.timerId)
+        return
+      }
+
+      if (this.aima.graphProblem.isSolved()) {
+        this.reset()
+      }
+      var callback = function () {
+        if (this.aima.graphProblem.isSolved()) {
+          this.timerId = clearTimeout(this.timerId)
+        } else {
+          this.next()
+          this.timerId = setTimeout(callback, this.aima.delay)
+        }
+      }.bind(this)
+
+      callback()
+    },
     /**
      * It renders next "frame" of visualization
      */
-    renderNext: function () {
-      var aima = this.aima
-      var nextNodeKey = aima.graphProblem.frontier[0]
-      aima.graphAgent.expand(nextNodeKey)
+    next: function () {
+      var nextNodeKey = this.aima.graphProblem.frontier[0]
+      this.aima.graphAgent.expand(nextNodeKey)
       // TODO: GraphDrawAgent.iterate() or something like this
+    },
+    reset: function () {
+      this.aima.graphProblem.reset()
     },
     /**
      * @param {GraphProblem} graphProblem
