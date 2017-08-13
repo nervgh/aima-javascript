@@ -45,9 +45,7 @@ window.vmAStarSearch = new Vue({
     )
 
     aima.delay = 2000 // ms
-
-    // It should color this node as "next" one
-    aima.graphProblem.nodes['A'].state = 'next'
+    aima.graphProblem.nodes['A'].state = 'next' // It should color this node as "next" one
 
     console.log('aStarSearch:aima', aima)
 
@@ -75,7 +73,7 @@ window.vmAStarSearch = new Vue({
         }
       }.bind(this)
 
-      callback()
+      this.timerId = setTimeout(callback, this.aima.delay)
     },
     /**
      * It renders next "frame" of visualization
@@ -87,6 +85,7 @@ window.vmAStarSearch = new Vue({
     },
     reset: function () {
       this.aima.graphProblem.reset()
+      this.aima.graphProblem.nodes['A'].state = 'next'
     },
     /**
      * @param {GraphProblem} graphProblem
