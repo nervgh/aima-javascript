@@ -11,7 +11,14 @@
 /* global GraphDrawAgent */
 
 window.vmAStarSearch = new Vue({
+  /**
+   * The mount point
+   */
   el: '#aStarSearchBox',
+  /**
+   * We should define our data here
+   * @return {Object}
+   */
   data: function () {
     // namespace
     var aima = {}
@@ -26,26 +33,13 @@ window.vmAStarSearch = new Vue({
       'O'
     )
 
-    aima.graphAgent = new GraphAgentAStarSearch(aima.graphProblem)
     aima.options = new DefaultOptions()
     aima.options.nodes.next.fill = 'hsla(126, 100%, 69%, 1)'
     aima.options.edges.showCost = true
 
-    aima.canvas = {
-      width: 600,
-      height: 350
-    }
-
-    aima.graphDrawAgent = new GraphDrawAgent(
-      aima.graphProblem,
-      'aStarSearchCanvas',
-      aima.options,
-      aima.canvas.height,
-      aima.canvas.width
-    )
-
     aima.delay = 2000 // ms
-    aima.graphProblem.nodes['A'].state = 'next' // It should color this node as "next" one
+    // It should color this node as "next" one
+    aima.graphProblem.nodes[aima.graphProblem.initialKey].state = 'next'
 
     console.log('aStarSearch:aima', aima)
 
@@ -54,7 +48,31 @@ window.vmAStarSearch = new Vue({
       timerId: null
     }
   },
+  /**
+   * @see https://vuejs.org/v2/api/#mounted
+   */
+  mounted: function () {
+    var canvasOptions = {
+      width: 600,
+      height: 350
+    }
+
+    this.graphDrawAgent = new GraphDrawAgent(
+      this.aima.graphProblem,
+      'aStarSearchCanvas',
+      this.aima.options,
+      canvasOptions.height,
+      canvasOptions.width
+    )
+
+    this.graphAgent = new GraphAgentAStarSearch(
+      this.aima.graphProblem
+    )
+  },
   methods: {
+    /**
+     * It plays, pauses the animation
+     */
     playOrPause: function () {
       if (this.timerId) {
         this.timerId = clearTimeout(this.timerId)
@@ -80,12 +98,16 @@ window.vmAStarSearch = new Vue({
      */
     next: function () {
       var nextNodeKey = this.aima.graphProblem.frontier[0]
-      this.aima.graphAgent.expand(nextNodeKey)
-      // TODO: GraphDrawAgent.iterate() or something like this
+      this.graphAgent.expand(nextNodeKey)
+      this.graphDrawAgent.iterate()
     },
+    /**
+     * It resets the visualization state
+     */
     reset: function () {
       this.aima.graphProblem.reset()
       this.aima.graphProblem.nodes[this.aima.graphProblem.initialKey].state = 'next'
+      this.graphDrawAgent.iterate() // updates graph
     },
     /**
      * @param {GraphProblem} graphProblem
