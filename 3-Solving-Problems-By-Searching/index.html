@@ -406,13 +406,37 @@
 
       <div class="row" id="aStarSearchBox">
         <h2>A Star Search</h2>
-        <p>Click on the canvas to restart the simulation</p>
 
         <div class="row">
           <div class="col-sm-6 col-md-6">
             <!--<div class='btn btn-primary' id='ucsRestartButton'>Restart</div>-->
-            <div class="canvas" id="aStarSearchCanvas" style="height: 300px;">
+            <div class="col-sm-3 col-md-3">
+              <div class="form-group">
+                <label>Start node</label>
+                <select v-model="aima.graphProblem.initialKey"
+                        v-bind:disabled="aima.graphProblem.inProgress()"
+                        class="form-control">
+                  <option v-for="node in aima.graphProblem.nodes"
+                          v-bind:value="node.id"
+                          v-text="node.id">
+                  </option>
+                </select>
+              </div>
             </div>
+            <div class="col-sm-3 col-md-3">
+              <div class="form-group">
+                <label>Goal node</label>
+                <select v-model="aima.graphProblem.goalKey"
+                        v-bind:disabled="aima.graphProblem.inProgress()"
+                        class="form-control">
+                  <option v-for="node in aima.graphProblem.nodes"
+                          v-bind:value="node.id"
+                          v-text="node.id">
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="canvas" id="aStarSearchCanvas" style="height: 300px;"></div>
           </div>
           <div class="col-sm-6 col-md-6">
             <div class="notes">
