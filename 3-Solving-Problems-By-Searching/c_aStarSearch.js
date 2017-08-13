@@ -85,7 +85,7 @@ window.vmAStarSearch = new Vue({
     },
     reset: function () {
       this.aima.graphProblem.reset()
-      this.aima.graphProblem.nodes['A'].state = 'next'
+      this.aima.graphProblem.nodes[this.aima.graphProblem.initialKey].state = 'next'
     },
     /**
      * @param {GraphProblem} graphProblem
@@ -113,6 +113,21 @@ window.vmAStarSearch = new Vue({
       return graphProblem.explored.map(function (nodeKey) {
         return graphProblem.nodes[nodeKey]
       })
+    },
+    /**
+     * @param {GraphProblem} graphProblem
+     * @return {Array.<Object>}
+     */
+    getPathNodes: function (graphProblem) {
+      var currentKey = graphProblem.frontier[0]
+      var node = graphProblem.nodes[currentKey]
+      var stack = []
+      while (node) {
+        stack.push(node)
+        var parentKey = node.parent
+        node = graphProblem.nodes[parentKey]
+      }
+      return stack.reverse()
     },
     /**
      * @param {GraphProblem} graphProblem

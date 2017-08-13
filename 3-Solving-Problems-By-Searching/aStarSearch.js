@@ -78,7 +78,7 @@ class GraphProblemAStarSearch extends GraphProblem {
    * @return {Boolean}
    */
   inProgress () {
-    return this.explored.length !== 0
+    return this.explored.length > 0 && !this.isSolved()
   }
   /**
    * @return {Boolean}

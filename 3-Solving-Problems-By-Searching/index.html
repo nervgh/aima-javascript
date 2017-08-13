@@ -417,6 +417,7 @@
                   <label>Start node</label>
                   <select v-model="aima.graphProblem.initialKey"
                           v-bind:disabled="aima.graphProblem.inProgress()"
+                          v-on:change="reset()"
                           class="form-control">
                     <option v-for="node in aima.graphProblem.nodes"
                             v-bind:value="node.id"
@@ -430,6 +431,7 @@
                   <label>Goal node</label>
                   <select v-model="aima.graphProblem.goalKey"
                           v-bind:disabled="aima.graphProblem.inProgress()"
+                          v-on:change="reset()"
                           class="form-control">
                     <option v-for="node in aima.graphProblem.nodes"
                             v-bind:value="node.id"
@@ -456,16 +458,15 @@
                   </button>
                 </div>
                 <div class="btn-group">
-                  <button v-bind:disabled="!aima.graphProblem.inProgress()"
-                          v-on:click="reset()"
+                  <button v-on:click="reset()"
                           type="button"
                           class="btn btn-default">
                     <i class="glyphicon glyphicon-repeat"></i>
                   </button>
                 </div>
               </div>
-              <br>
               <p v-show="aima.graphProblem.isSolved()">
+                <br>
                 <strong>This problem is solved. Next node which will be expanded is the goal node.</strong>
               </p>
               <div class="canvas" id="aStarSearchCanvas" style="height: 300px;"></div>
@@ -492,6 +493,17 @@
               </ul>
             </div>
             <div class="row explanation-area">
+              <div class="explanation-container" style="margin-top: 0; min-height: auto;">
+                <h4 class="text-center">Path</h4>
+                <ul class="graph-nodes-container">
+                  <li v-for="node in getPathNodes(aima.graphProblem)"
+                      v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
+                      class="graph-node pull-left"
+                      style="margin: 16px 16px 0 0;"
+                      v-text="node.id">
+                  </li>
+                </ul>
+              </div>
               <h4 class="text-center">Priority Queue (Frontier)</h4>
               <table class="table">
                 <thead>
