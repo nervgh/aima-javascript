@@ -62,7 +62,7 @@ class GraphProblemAStarSearch extends GraphProblem {
    * @return {Array.<GraphNode>}
    */
   getSuccessors (nodeKey) {
-    return this.getAdjacent(nodeKey).map(key => this.nodes[key])
+    return this.getAdjacent(nodeKey).map(item => this.nodes[item.nodeKey])
   }
   /**
    * Resets problem
@@ -76,8 +76,14 @@ class GraphProblemAStarSearch extends GraphProblem {
   /**
    * @return {Boolean}
    */
+  inProgress () {
+    return this.explored.length !== 0
+  }
+  /**
+   * @return {Boolean}
+   */
   isSolved () {
-    return this.explored.indexOf(this.goalKey) !== -1
+    return this.isGoal(this.frontier[0])
   }
   /**
    * @param {String} nodeKey
@@ -131,13 +137,13 @@ class GraphAgentAStarSearch extends GraphAgent {
   expand (nodeKey) {
     const parentNode = this.problem.nodes[nodeKey]
 
-    this.problem.removeFromFrontier(parentNode.id)
-    this.problem.addToExplored(parentNode.id)
-
     if (this.problem.isGoal(parentNode.id)) {
       // TODO: parentNode.state = 'goal'
       return
     }
+
+    this.problem.removeFromFrontier(parentNode.id)
+    this.problem.addToExplored(parentNode.id)
 
     for (const successorNode of this.problem.getSuccessors(parentNode.id)) {
       if (this.problem.isExplored(successorNode.id)) {

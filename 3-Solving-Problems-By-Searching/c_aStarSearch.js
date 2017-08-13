@@ -61,9 +61,6 @@ window.vmAStarSearch = new Vue({
      */
     renderNext: function () {
       var aima = this.aima
-      if (aima.graphProblem.isSolved()) {
-        return
-      }
       var nextNodeKey = aima.graphProblem.frontier[0]
       aima.graphAgent.expand(nextNodeKey)
       // TODO: GraphDrawAgent.iterate() or something like this

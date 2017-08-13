@@ -115,8 +115,10 @@ var DefaultGraph = function() {
     ['N', 'O', 2]
   ];
 };
+
+
 // Structure for the graph problem for the simulations
-var GraphProblem = function(nodes, edges, initialKey, nextToExpand) {
+function GraphProblem(nodes, edges, initialKey, nextToExpand) {
   this.nodes = nodes;
   this.edges = edges;
   this.nodes[initialKey].state = 'frontier';
@@ -129,98 +131,96 @@ var GraphProblem = function(nodes, edges, initialKey, nextToExpand) {
   //Used for BFS,DFS,UCS etc where it is important to show the next node which
   //will be expanded from the graph before actually expanding it.
   this.nextToExpand = nextToExpand;
-  //Takes a node and returns a list of its adjacent nodes
-  this.getAdjacent = function(nodeKey) {
-    var edges = this.edges.filter((edge) => edge[0] == nodeKey || edge[1] == nodeKey);
-    var adjacent = [];
-    for (var i = 0; i < edges.length; i++) {
-      if (edges[i][0] == nodeKey) {
-        adjacent.push({
-          nodeKey: edges[i][1],
-          cost: edges[i][2]
-        });
-      } else {
-        adjacent.push({
-          nodeKey: edges[i][0],
-          cost: edges[i][2]
-        });
-      }
+}
+//Takes a node and returns a list of its adjacent nodes
+GraphProblem.prototype.getAdjacent = function(nodeKey) {
+  var edges = this.edges.filter((edge) => edge[0] == nodeKey || edge[1] == nodeKey);
+  var adjacent = [];
+  for (var i = 0; i < edges.length; i++) {
+    if (edges[i][0] == nodeKey) {
+      adjacent.push({
+        nodeKey: edges[i][1],
+        cost: edges[i][2]
+      });
+    } else {
+      adjacent.push({
+        nodeKey: edges[i][0],
+        cost: edges[i][2]
+      });
     }
-    return adjacent;
-  };
-  //Check if an edge is already visited
-  this.ifEdgeVisited = function(edge) {
-    return this.nodes[edge[0]].state == 'explored' || this.nodes[edge[1]].state == 'explored';
+  }
+  return adjacent;
+}
+//Check if an edge is already visited
+GraphProblem.prototype.ifEdgeVisited = function(edge) {
+  return this.nodes[edge[0]].state == 'explored' || this.nodes[edge[1]].state == 'explored';
+}
+GraphProblem.prototype.removeFromFrontier = function(nodeKey) {
+  this.frontier = this.frontier.filter(function(e) {
+    return e != nodeKey;
+  });
+}
+GraphProblem.prototype.addToFrontier = function(nodeKey) {
+  this.frontier.push(nodeKey);
+  this.nodes[nodeKey].state = 'frontier';
+}
+GraphProblem.prototype.addToExplored = function(nodeKey) {
+  this.explored.push(nodeKey);
+  this.nodes[nodeKey].state = 'explored';
+}
+GraphProblem.prototype.reset = function() {
+  //Reset nodes
+  for (i in this.nodes) {
+    this.nodes[i].state = 'unexplored';
+    this.nodes[i].cost = Number.POSITIVE_INFINITY;
+    this.nodes[i].parent = null;
+    this.nodes[i].depth = Number.POSITIVE_INFINITY;
   }
 
-  this.removeFromFrontier = function(nodeKey) {
-    this.frontier = this.frontier.filter(function(e) {
-      return e != nodeKey;
-    });
-  };
-  this.addToFrontier = function(nodeKey) {
-    this.frontier.push(nodeKey);
-    this.nodes[nodeKey].state = 'frontier';
-  };
-  this.addToExplored = function(nodeKey) {
-    this.explored.push(nodeKey);
-    this.nodes[nodeKey].state = 'explored';
-  };
+  //Initialize first node
+  this.nodes[this.initialKey].state = 'frontier';
+  this.nodes[this.initialKey].cost = 0;
+  this.nodes[this.initialKey].parent = null;
+  this.nodes[this.initialKey].depth = 0;
 
-  this.reset = function() {
-    //Reset nodes
-    for (i in this.nodes) {
-      this.nodes[i].state = 'unexplored';
-      this.nodes[i].cost = Number.POSITIVE_INFINITY;
-      this.nodes[i].parent = null;
-      this.nodes[i].depth = Number.POSITIVE_INFINITY;
-    }
+  this.frontier = [this.initialKey];
+  this.explored = [];
+}
 
-    //Initialize first node
-    this.nodes[this.initialKey].state = 'frontier';
-    this.nodes[this.initialKey].cost = 0;
-    this.nodes[this.initialKey].parent = null;
-    this.nodes[this.initialKey].depth = 0;
-
-    this.frontier = [this.initialKey];
-    this.explored = [];
-  };
-
-};
 //An agent that can work on the graph by expanding nodes
-var GraphAgent = function(problem, algo) {
-    this.problem = problem;
-    this.algo = algo;
-    //The function that expands a node from the graph
-    this.expand = function(nodeKey) {
-      this.problem.removeFromFrontier(nodeKey);
-      this.problem.addToExplored(nodeKey);
-      let adjacent = this.problem.getAdjacent(nodeKey);
-      for (var i = 0; i < adjacent.length; i++) {
-        //For every adjacent node
-        let nextNodeKey = adjacent[i].nodeKey;
-        let nextNode = this.problem.nodes[nextNodeKey];
-        if (nextNode.state == 'unexplored') {
-          //If the adjacent node is unexplored,
-          this.problem.addToFrontier(nextNodeKey);
-          //Add it to frontier and update its properties
-          nextNode.cost = adjacent[i].cost + this.problem.nodes[nodeKey].cost;
-          nextNode.parent = nodeKey;
-          nextNode.depth = this.problem.nodes[nodeKey].depth + 1;
-        }
-        //In UCS, Some extra logic is involved
-        if (this.algo == 'ucs') {
-          //If the node which is in frontier has cost lower than the new cost,
-          if (nextNode.state == 'frontier' && nextNode.cost > adjacent[i].cost + this.problem.nodes[nodeKey].cost) {
-            //Assign the lower cost
-            nextNode.cost = adjacent[i].cost + this.problem.nodes[nodeKey].cost;
-            nextNode.parent = nodeKey;
-          }
-        }
-      }
-    };
 
+function GraphAgent (problem, algo) {
+  this.problem = problem;
+  this.algo = algo;
+}
+GraphAgent.prototype.expand = function (nodeKey) {
+  this.problem.removeFromFrontier(nodeKey);
+  this.problem.addToExplored(nodeKey);
+  let adjacent = this.problem.getAdjacent(nodeKey);
+  for (var i = 0; i < adjacent.length; i++) {
+    //For every adjacent node
+    let nextNodeKey = adjacent[i].nodeKey;
+    let nextNode = this.problem.nodes[nextNodeKey];
+    if (nextNode.state == 'unexplored') {
+      //If the adjacent node is unexplored,
+      this.problem.addToFrontier(nextNodeKey);
+      //Add it to frontier and update its properties
+      nextNode.cost = adjacent[i].cost + this.problem.nodes[nodeKey].cost;
+      nextNode.parent = nodeKey;
+      nextNode.depth = this.problem.nodes[nodeKey].depth + 1;
+    }
+    //In UCS, Some extra logic is involved
+    if (this.algo == 'ucs') {
+      //If the node which is in frontier has cost lower than the new cost,
+      if (nextNode.state == 'frontier' && nextNode.cost > adjacent[i].cost + this.problem.nodes[nodeKey].cost) {
+        //Assign the lower cost
+        nextNode.cost = adjacent[i].cost + this.problem.nodes[nodeKey].cost;
+        nextNode.parent = nodeKey;
+      }
+    }
   }
+}
+
   // An agent which draws the graphs to the page
 var GraphDrawAgent = function(graphProblem, selector, options, h, w) {
   this.canvas = document.getElementById(selector);
