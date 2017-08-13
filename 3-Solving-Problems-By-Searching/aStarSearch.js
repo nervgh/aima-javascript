@@ -51,11 +51,12 @@ class GraphProblemAStarSearch extends GraphProblem {
    * @return {Number}
    */
   estimate (nodeKey, goalKey = this.goalKey) {
-    let nodeA = this.nodes[nodeKey]
-    let nodeB = this.nodes[goalKey]
-    let point1 = [nodeA.x, nodeA.y]
-    let point2 = [nodeB.x, nodeB.y]
-    return GraphProblemAStarSearch.euclideanDistance(point1, point2)
+    const nodeA = this.nodes[nodeKey]
+    const nodeB = this.nodes[goalKey]
+    const point1 = [nodeA.x, nodeA.y]
+    const point2 = [nodeB.x, nodeB.y]
+    const estimated = GraphProblemAStarSearch.euclideanDistance(point1, point2)
+    return Math.round(estimated)
   }
   /**
    * @param {String} nodeKey
@@ -165,12 +166,20 @@ class GraphAgentAStarSearch extends GraphAgent {
 
       // This path is the best until now. We should save it.
       successorNode.cost = tentativeGScore
-      successorNode.totalCost = tentativeGScore + this.problem.estimate(successorNode.id)
+      successorNode.estimatedCost = this.problem.estimate(successorNode.id)
+      successorNode.totalCost = successorNode.cost + successorNode.estimatedCost
     }
 
     // We should prioritize the queue items
     this.problem.frontier.sort((keyA, keyB) => {
       return this.problem.nodes[keyA].totalCost - this.problem.nodes[keyB].totalCost
     })
+
+    // We should colorize next node
+    if (this.problem.frontier.length > 0) {
+      const nextNodeKey = this.problem.frontier[0]
+      const nextNode = this.problem.nodes[nextNodeKey]
+      nextNode.state = 'next'
+    }
   }
 }
