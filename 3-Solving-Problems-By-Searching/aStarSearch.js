@@ -6,6 +6,7 @@
 /* global DefaultGraph */
 /* global GraphProblem */
 /* global GraphAgent */
+/* global euclideanDistance */
 
 // The default graph that is used in most of the simulation
 // This ensures consistency in the experience of the user
@@ -24,7 +25,7 @@ class GraphAStarSearch extends DefaultGraph {
       const nodeB = graph.nodes[nodeKeyB]
       const pointA = [nodeA.x, nodeA.y]
       const pointB = [nodeB.x, nodeB.y]
-      const distance = GraphProblemAStarSearch.euclideanDistance(pointA, pointB)
+      const distance = euclideanDistance(pointA, pointB)
       const cost = Math.round(distance)
       // console.log('%s -> %s, distance=%s, cost=%s', nodeKeyA, nodeKeyB, distance, cost)
       edge[2] = cost
@@ -81,7 +82,7 @@ class GraphProblemAStarSearch extends GraphProblem {
     const nodeB = this.nodes[goalKey]
     const point1 = [nodeA.x, nodeA.y]
     const point2 = [nodeB.x, nodeB.y]
-    const estimated = GraphProblemAStarSearch.euclideanDistance(point1, point2)
+    const estimated = euclideanDistance(point1, point2)
     return Math.round(estimated)
   }
   /**
@@ -136,14 +137,6 @@ class GraphProblemAStarSearch extends GraphProblem {
   static isEqualNodeKeyPair (nodeKeyA1, nodeKeyB1, nodeKeyA2, nodeKeyB2) {
     return (nodeKeyA1 === nodeKeyA2 && nodeKeyB1 === nodeKeyB2) ||
            (nodeKeyA1 === nodeKeyB2 && nodeKeyB1 === nodeKeyA2)
-  }
-  /**
-   * @param {Array.<Number>} point1
-   * @param {Array.<Number>} point2
-   * @return {Number}
-   */
-  static euclideanDistance (point1, point2) {
-    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2))
   }
   /**
    * Turns an object to an array of objects
