@@ -90,7 +90,14 @@ class GraphProblemAStarSearch extends GraphProblem {
    * @param {String} nodeKey
    * @return {Boolean}
    */
-  isExplored (nodeKey) {
+  isQueuedNode (nodeKey) {
+    return this.frontier.indexOf(nodeKey) !== -1
+  }
+  /**
+   * @param {String} nodeKey
+   * @return {Boolean}
+   */
+  isExploredNode (nodeKey) {
     return this.explored.indexOf(nodeKey) !== -1
   }
   /**
@@ -147,7 +154,8 @@ class GraphAgentAStarSearch extends GraphAgent {
     this.problem.addToExplored(parentNode.id)
 
     for (const successorNode of this.problem.getSuccessors(parentNode.id)) {
-      if (this.problem.isExplored(successorNode.id)) {
+      if (this.problem.isExploredNode(successorNode.id) ||
+          this.problem.isQueuedNode(successorNode.id)) {
         continue
       }
 
