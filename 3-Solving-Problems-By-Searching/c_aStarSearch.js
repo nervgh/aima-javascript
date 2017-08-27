@@ -97,8 +97,20 @@ window.vmAStarSearch = new Vue({
      * It renders next "frame" of visualization
      */
     next: function () {
+      if (this.aima.graphProblem.isSolved()) {
+        return
+      }
+
+      // Do next step
       var nextNodeKey = this.aima.graphProblem.frontier[0]
       this.graphAgent.expand(nextNodeKey)
+
+      // Do some things AFTER the step: We should colorize next node
+      var nextIterationNodeKey = this.aima.graphProblem.frontier[0]
+      var nextIterationNode = this.aima.graphProblem.nodes[nextIterationNodeKey]
+      nextIterationNode.state = 'next'
+
+      // Visualize the graph
       this.graphDrawAgent.iterate()
     },
     /**

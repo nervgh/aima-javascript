@@ -182,12 +182,5 @@ class GraphAgentAStarSearch extends GraphAgent {
     this.problem.frontier.sort((keyA, keyB) => {
       return this.problem.nodes[keyA].totalCost - this.problem.nodes[keyB].totalCost
     })
-
-    // We should colorize next node
-    if (this.problem.frontier.length > 0) {
-      const nextNodeKey = this.problem.frontier[0]
-      const nextNode = this.problem.nodes[nextNodeKey]
-      nextNode.state = 'next'
-    }
   }
 }
