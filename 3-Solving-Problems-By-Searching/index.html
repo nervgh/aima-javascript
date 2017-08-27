@@ -509,10 +509,10 @@
                 <thead>
                   <tr>
                     <th>Node</th>
-                    <th>Depth</th>
+                    <th>f(n)=g(n)+h(n)</th>
                     <th>g(n)</th>
                     <th>h(n)</th>
-                    <th>f(n)=g(n)+h(n)</th>
+                    <th>Depth</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -520,10 +520,10 @@
                     <td><span v-text="node.id"
                               v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
                               class="graph-node"></span></td>
-                    <td><span v-text="node.depth"></span></td>
+                    <td><span v-text="node.totalCost"></span></td>
                     <td><span v-text="node.cost"></span></td>
                     <td><span v-text="node.estimatedCost"></span></td>
-                    <td><span v-text="node.totalCost"></span></td>
+                    <td><span v-text="node.depth"></span></td>
                   </tr>
                 </tbody>
               </table>
