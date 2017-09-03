@@ -3,8 +3,38 @@
 // ESLint Config -- http://eslint.org/docs/user-guide/configuring
 
 /* eslint-env browser */
+/* global DefaultGraph */
 /* global GraphProblem */
 /* global GraphAgent */
+
+// The default graph that is used in most of the simulation
+// This ensures consistency in the experience of the user
+class GraphAStarSearch extends DefaultGraph {
+  constructor () {
+    super()
+    // It adapts the default graph data for using h(n) heuristic
+    this.nodes['J'].y -= 25
+    GraphAStarSearch.reWeightEdges(this)
+  }
+  static reWeightEdges (graph) {
+    const factor = 1
+    for (let edge of graph.edges) {
+      const nodeKeyA = edge[0]
+      const nodeKeyB = edge[1]
+      const nodeA = graph.nodes[nodeKeyA]
+      const nodeB = graph.nodes[nodeKeyB]
+      const pointA = [nodeA.x, nodeA.y]
+      const pointB = [nodeB.x, nodeB.y]
+      const distance = GraphProblemAStarSearch.euclideanDistance(pointA, pointB)
+      const cost = factor * Math.round(distance / GraphAStarSearch.getNodeSize())
+      // console.log('%s -> %s, distance=%s, cost=%s', nodeKeyA, nodeKeyB, distance, cost)
+      edge[2] = cost
+    }
+  }
+  static getNodeSize () {
+    return 32
+  }
+}
 
 // Code for A Star Search
 
@@ -56,7 +86,7 @@ class GraphProblemAStarSearch extends GraphProblem {
     const point1 = [nodeA.x, nodeA.y]
     const point2 = [nodeB.x, nodeB.y]
     const estimated = GraphProblemAStarSearch.euclideanDistance(point1, point2)
-    return Math.round(estimated)
+    return Math.round(estimated / GraphAStarSearch.getNodeSize())
   }
   /**
    * @param {String} nodeKey

@@ -4,7 +4,7 @@
 /* eslint-env browser */
 
 /* global Vue */
-/* global DefaultGraph */
+/* global GraphAStarSearch */
 /* global GraphProblemAStarSearch */
 /* global GraphAgentAStarSearch */
 /* global DefaultOptions */
@@ -24,7 +24,7 @@ window.vmAStarSearch = new Vue({
     var aima = {}
 
     // The default graph
-    aima.graph = new DefaultGraph()
+    aima.graph = new GraphAStarSearch()
     aima.graphProblem = new GraphProblemAStarSearch(
       aima.graph.nodes,
       aima.graph.edges,
