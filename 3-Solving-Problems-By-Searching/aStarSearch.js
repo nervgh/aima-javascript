@@ -184,12 +184,9 @@ class GraphAgentAStarSearch extends GraphAgent {
     this.problem.addToExplored(parentNode.id)
 
     for (const successorNode of this.problem.getSuccessors(parentNode.id)) {
-      if (this.problem.isExploredNode(successorNode.id) ||
-          this.problem.isQueuedNode(successorNode.id)) {
+      if (this.problem.isExploredNode(successorNode.id)) {
         continue
       }
-
-      this.problem.addToFrontier(successorNode.id)
 
       successorNode.depth = parentNode.depth + 1
       successorNode.parent = parentNode.id
@@ -206,6 +203,10 @@ class GraphAgentAStarSearch extends GraphAgent {
       successorNode.cost = tentativeGScore
       successorNode.estimatedCost = this.problem.estimate(successorNode.id)
       successorNode.totalCost = successorNode.cost + successorNode.estimatedCost
+
+      if (!this.problem.isQueuedNode(successorNode.id)) {
+        this.problem.addToFrontier(successorNode.id)
+      }
     }
 
     // We should prioritize the queue items
