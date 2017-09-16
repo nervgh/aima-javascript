@@ -37,15 +37,13 @@ window.vmAStarSearch = new Vue({
     aima.options.nodes.next.fill = 'hsla(126, 100%, 69%, 1)'
     aima.options.edges.showCost = true
 
-    aima.delay = 2000 // ms
     // It should color this node as "next" one
     aima.graphProblem.nodes[aima.graphProblem.initialKey].state = 'next'
 
-    console.log('aStarSearch:aima', aima)
+    // console.log('aStarSearch:aima', aima)
 
     return {
-      aima: aima,
-      timerId: null
+      aima: aima
     }
   },
   /**
@@ -70,34 +68,15 @@ window.vmAStarSearch = new Vue({
     )
   },
   methods: {
-    /**
-     * It plays, pauses the animation
-     */
-    playOrPause: function () {
-      if (this.timerId) {
-        this.timerId = clearTimeout(this.timerId)
+    // TODO: a reader should have the able to use the slider
+    prev: function () {
+      if (this.aima.graphProblem.isInitialState()) {
         return
       }
 
-      if (this.aima.graphProblem.isSolved()) {
-        this.reset()
-      }
-      var callback = function () {
-        if (this.aima.graphProblem.isSolved()) {
-          this.timerId = clearTimeout(this.timerId)
-        } else {
-          this.next()
-          this.timerId = setTimeout(callback, this.aima.delay)
-        }
-      }.bind(this)
-
-      this.timerId = setTimeout(callback, this.aima.delay)
     },
-    /**
-     * It renders next "frame" of visualization
-     */
     next: function () {
-      if (this.aima.graphProblem.isSolved()) {
+      if (this.aima.graphProblem.isSolvedState()) {
         return
       }
 
@@ -110,7 +89,7 @@ window.vmAStarSearch = new Vue({
       var nextIterationNode = this.aima.graphProblem.nodes[nextIterationNodeKey]
       nextIterationNode.state = 'next'
 
-      // Visualize the graph
+      // It renders the graph
       this.graphDrawAgent.iterate()
     },
     /**

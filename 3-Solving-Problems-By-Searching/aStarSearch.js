@@ -104,12 +104,18 @@ class GraphProblemAStarSearch extends GraphProblem {
    * @return {Boolean}
    */
   inProgress () {
-    return this.explored.length > 0 && !this.isSolved()
+    return this.explored.length > 0 && !this.isSolvedState()
   }
   /**
    * @return {Boolean}
    */
-  isSolved () {
+  isInitialState () {
+    return this.frontier[0] === this.initialKey
+  }
+  /**
+   * @return {Boolean}
+   */
+  isSolvedState () {
     return this.isGoal(this.frontier[0])
   }
   /**
