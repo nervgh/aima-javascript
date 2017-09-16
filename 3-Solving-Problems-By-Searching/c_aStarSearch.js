@@ -23,82 +23,93 @@ window.vmAStarSearch = new Vue({
     // namespace
     var aima = {}
 
-    // The default graph
-    aima.graph = new GraphAStarSearch()
-    aima.graphProblem = new GraphProblemAStarSearch(
-      aima.graph.nodes,
-      aima.graph.edges,
-      'A',
-      'A',
-      'O'
-    )
-
+    // Graph's options
     aima.options = new DefaultOptions()
     aima.options.nodes.next.fill = 'hsla(126, 100%, 69%, 1)'
     aima.options.edges.showCost = true
 
-    // It should color this node as "next" one
-    aima.graphProblem.nodes[aima.graphProblem.initialKey].state = 'next'
+    // Two.js' options
+    aima.canvasOptions = {
+      width: 600,
+      height: 350
+    }
 
-    // console.log('aStarSearch:aima', aima)
+    // values
+    aima.state = {
+      initialKey: 'A',
+      goalKey: 'O',
+      iterationsCount: 0,
+      maxIterationsCount: Number.POSITIVE_INFINITY // should be precalculated
+    }
+
+    aima.graphProblem = {}
 
     return {
       aima: aima
     }
   },
+  beforeMount: function () {
+    this.aima.graphProblem = this.createGraphProblem()
+    this.graphAgent = new GraphAgentAStarSearch(this.aima.graphProblem)
+
+    // console.log('aima:aStarSearch', this.aima.state)
+  },
   /**
    * @see https://vuejs.org/v2/api/#mounted
    */
   mounted: function () {
-    var canvasOptions = {
-      width: 600,
-      height: 350
-    }
-
     this.graphDrawAgent = new GraphDrawAgent(
-      this.aima.graphProblem,
+      this.aima.graphProblem, // it is solved graphProblem
       'aStarSearchCanvas',
       this.aima.options,
-      canvasOptions.height,
-      canvasOptions.width
+      this.aima.canvasOptions.height,
+      this.aima.canvasOptions.width
     )
 
-    this.graphAgent = new GraphAgentAStarSearch(
-      this.aima.graphProblem
-    )
+    this.reset()
   },
   methods: {
-    // TODO: a reader should have the able to use the slider
-    prev: function () {
-      if (this.aima.graphProblem.isInitialState()) {
-        return
-      }
-
+    createGraphProblem: function () {
+      // The default graph
+      var graph = new GraphAStarSearch()
+      var graphProblem = new GraphProblemAStarSearch(
+        graph.nodes,
+        graph.edges,
+        this.aima.state.initialKey,
+        this.aima.state.initialKey,
+        this.aima.state.goalKey
+      )
+      // It should color this node as "next" one
+      graphProblem.nodes[graphProblem.initialKey].state = 'next'
+      return graphProblem
     },
-    next: function () {
-      if (this.aima.graphProblem.isSolvedState()) {
-        return
-      }
+    /**
+     * Renders some state of graphProblem
+     * @param {Number} iterationsCount
+     */
+    render: function (iterationsCount) {
+      this.aima.state.iterationsCount = iterationsCount
 
-      // Do next step
-      var nextNodeKey = this.aima.graphProblem.frontier[0]
-      this.graphAgent.expand(nextNodeKey)
-
-      // Do some things AFTER the step: We should colorize next node
-      var nextIterationNodeKey = this.aima.graphProblem.frontier[0]
-      var nextIterationNode = this.aima.graphProblem.nodes[nextIterationNodeKey]
-      nextIterationNode.state = 'next'
-
+      this.aima.graphProblem.reset()
+      this.graphAgent.solve(this.aima.state.iterationsCount)
       // It renders the graph
       this.graphDrawAgent.iterate()
     },
     /**
-     * It resets the visualization state
+     * Resets a graphProblem
      */
     reset: function () {
       this.aima.graphProblem.reset()
-      this.aima.graphProblem.nodes[this.aima.graphProblem.initialKey].state = 'next'
-      this.graphDrawAgent.iterate() // updates graph
+      this.aima.graphProblem.initialKey = this.aima.state.initialKey
+      this.aima.graphProblem.nextToExpand = this.aima.state.initialKey
+      this.aima.graphProblem.goalKey = this.aima.state.goalKey
+
+      this.aima.state.iterationsCount = 0
+      this.aima.state.maxIterationsCount = this.graphAgent.solve()
+      // We have to reset graphProblem because it is already solved in the line above
+      this.aima.graphProblem.reset()
+      // It renders the graph
+      this.graphDrawAgent.iterate()
     },
     /**
      * @param {GraphProblem} graphProblem

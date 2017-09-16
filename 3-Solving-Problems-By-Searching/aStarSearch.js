@@ -103,12 +103,6 @@ class GraphProblemAStarSearch extends GraphProblem {
   /**
    * @return {Boolean}
    */
-  inProgress () {
-    return this.explored.length > 0 && !this.isSolvedState()
-  }
-  /**
-   * @return {Boolean}
-   */
   isInitialState () {
     return this.frontier[0] === this.initialKey
   }
@@ -205,5 +199,28 @@ class GraphAgentAStarSearch extends GraphAgent {
     this.problem.frontier.sort((keyA, keyB) => {
       return this.problem.nodes[keyA].totalCost - this.problem.nodes[keyB].totalCost
     })
+  }
+  /**
+   * Solves a problem and returns how many iterations it takes
+   * @param {Number} [iterationsCount=Number.POSITIVE_INFINITY]
+   * @returns {Number}
+   */
+  solve (iterationsCount = Number.POSITIVE_INFINITY) {
+    let k = 0
+
+    while (iterationsCount > 0 && !this.problem.isSolvedState()) {
+      // Expands next node
+      this.expand(this.problem.frontier[0])
+
+      // Highlights a node which will be expanded at next iteration
+      const nextIterationNodeKey = this.problem.frontier[0]
+      const nextIterationNode = this.problem.nodes[nextIterationNodeKey]
+      nextIterationNode.state = 'next'
+
+      iterationsCount -= 1
+      k += 1
+    }
+
+    return k
   }
 }

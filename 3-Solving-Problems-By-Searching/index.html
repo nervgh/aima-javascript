@@ -428,8 +428,7 @@
             <div class="row">
               <div class="col-sm-3 col-md-3">
                 <label>Start node</label>
-                <select v-model="aima.graphProblem.initialKey"
-                        v-bind:disabled="aima.graphProblem.inProgress()"
+                <select v-model="aima.state.initialKey"
                         v-on:change="reset()"
                         class="form-control">
                   <option v-for="node in aima.graphProblem.nodes"
@@ -440,8 +439,7 @@
               </div>
               <div class="col-sm-3 col-md-3">
                 <label>Goal node</label>
-                <select v-model="aima.graphProblem.goalKey"
-                        v-bind:disabled="aima.graphProblem.inProgress()"
+                <select v-model="aima.state.goalKey"
                         v-on:change="reset()"
                         class="form-control">
                   <option v-for="node in aima.graphProblem.nodes"
@@ -452,24 +450,28 @@
               </div>
               <div class="col-sm-7 col-md-7">
                 <div style="margin-top: 10px;">
-                  <input type="range"
+                  <input v-model="aima.state.iterationsCount"
+                         v-bind:max="aima.state.maxIterationsCount"
+                         v-on:input="render(aima.state.iterationsCount)"
+                         type="range"
                          min="0"
-                         max="5"
                          step="1"
                          class="form-control"
                          style="padding: 6px 0; width: 84%;">
                   <div class="btn-group">
-                    <button v-on:click="prev()"
+                    <button v-on:click="render(aima.state.iterationsCount - 1)"
+                            v-bind:disabled="aima.graphProblem.isInitialState()"
                             type="button"
                             class="btn btn-default">
                       <i class="glyphicon glyphicon-step-backward"></i>
                     </button>
-                    <button v-on:click="next()"
+                    <button v-on:click="render(aima.state.iterationsCount + 1)"
+                            v-bind:disabled="aima.graphProblem.isSolvedState()"
                             type="button"
                             class="btn btn-default">
                       <i class="glyphicon glyphicon-step-forward"></i>
                     </button>
-                    <button v-on:click="reset()"
+                    <button v-on:click="render(0)"
                             type="button"
                             class="btn btn-primary">
                       Reset
@@ -479,11 +481,11 @@
               </div>
             </div>
             <div class="row">
-              <p v-show="aima.graphProblem.isSolvedState()">
+              <div class="canvas" id="aStarSearchCanvas" style="height: 300px;"></div>
+              <p v-show="aima.graphProblem.isSolvedState()" style="margin-top: 40px;">
                 <br>
                 <strong>This problem is solved. Next node which will be expanded is the goal node.</strong>
               </p>
-              <div class="canvas" id="aStarSearchCanvas" style="height: 300px;"></div>
             </div>
           </div>
           <div class="col-sm-5 col-md-5 ">
@@ -568,7 +570,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
