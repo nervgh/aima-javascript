@@ -444,3 +444,9 @@ var dlsDrawAgent = function(selector) {
     this.graphDrawAgent.iterate();
   }
 }
+
+// Function to calculate euclidean distance
+// It is used by bi-directional and a-star algorithms
+function euclideanDistance(point1, point2) {
+  return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
+}
