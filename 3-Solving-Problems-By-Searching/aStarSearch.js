@@ -35,7 +35,6 @@ class GraphAStarSearch extends DefaultGraph {
 
 // Code for A Star Search
 
-// TODO: Should we use ES5 syntax for support old browsers?
 class GraphProblemAStarSearch extends GraphProblem {
   /**
    * @see https://github.com/nervgh/astar-algorithm
@@ -154,7 +153,6 @@ class GraphProblemAStarSearch extends GraphProblem {
   }
 }
 
-// TODO: Should we use ES5 syntax for support old browsers?
 class GraphAgentAStarSearch extends GraphAgent {
   /**
    * The function that expands a node from the graph
@@ -165,7 +163,6 @@ class GraphAgentAStarSearch extends GraphAgent {
     const parentNode = this.problem.nodes[nodeKey]
 
     if (this.problem.isGoal(parentNode.id)) {
-      // TODO: parentNode.state = 'goal'
       return
     }
 
