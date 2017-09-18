@@ -101,18 +101,6 @@ class GraphProblemAStarSearch extends GraphProblem {
     }
   }
   /**
-   * @return {Boolean}
-   */
-  isInitialState () {
-    return this.frontier[0] === this.initialKey
-  }
-  /**
-   * @return {Boolean}
-   */
-  isSolvedState () {
-    return this.isGoal(this.frontier[0])
-  }
-  /**
    * @param {String} nodeKey
    * @return {Boolean}
    */
@@ -208,7 +196,7 @@ class GraphAgentAStarSearch extends GraphAgent {
   solve (iterationsCount = Number.POSITIVE_INFINITY) {
     let k = 0
 
-    while (iterationsCount > 0 && !this.problem.isSolvedState()) {
+    while (iterationsCount > 0 && !this.problem.isGoal(this.problem.frontier[0])) {
       // Expands next node
       this.expand(this.problem.frontier[0])
 
