@@ -18,6 +18,13 @@ function AStarSearchRenderer () {
   this.dom.stepBackward = document.querySelector('#aStarSearchBox-stepBackward')
   this.dom.stepForward = document.querySelector('#aStarSearchBox-stepForward')
   this.dom.reset = document.querySelector('#aStarSearchBox-reset')
+  this.dom.legendFrontier = document.querySelector('#aStarSearchBox-legendFrontier')
+  this.dom.legendNext = document.querySelector('#aStarSearchBox-legendNext')
+  this.dom.legendExplored = document.querySelector('#aStarSearchBox-legendExplored')
+  this.dom.pathContainer = document.querySelector('#aStarSearchBox-pathContainer')
+  this.dom.priorityQueueContainer = document.querySelector('#aStarSearchBox-priorityQueueContainer')
+  this.dom.unexploredNodesContainer = document.querySelector('#aStarSearchBox-unexploredNodesContainer')
+  this.dom.exploredNodesContainer = document.querySelector('#aStarSearchBox-exploredNodesContainer')
 
   // Graph's options
   this.options = new DefaultOptions()
@@ -125,6 +132,7 @@ AStarSearchRenderer.prototype.reset = function () {
  */
 AStarSearchRenderer.prototype.render = function () {
   var helpers = AStarSearchRenderer.helpers
+  var templates = AStarSearchRenderer.templates
   var nodes = this.graphProblem.nodes
   var state = this.state
 
@@ -153,10 +161,58 @@ AStarSearchRenderer.prototype.render = function () {
   // stepForward
   this.dom.stepForward.disabled = this.state.iterationsCount === this.state.maxIterationsCount
 
+  // legends
+  this.dom.legendFrontier.style.backgroundColor = this.options.nodes.frontier.fill
+  this.dom.legendNext.style.backgroundColor = this.options.nodes.next.fill
+  this.dom.legendExplored.style.backgroundColor = this.options.nodes.explored.fill
+
+  // -------------------
   this.graphProblem.reset()
   this.graphAgent.solve(this.state.iterationsCount)
   // It renders the graph (Two.js)
   this.graphDrawAgent.iterate()
+  // -------------------
+
+  // templates
+  var pathNodesInnerHtml = ''
+  helpers.forEach(helpers.getPathNodes(this.graphProblem), function (node) {
+    pathNodesInnerHtml += templates.renderNodeToString(
+      this.graphProblem,
+      this.options,
+      node
+    )
+  }, this)
+  this.dom.pathContainer.innerHTML = pathNodesInnerHtml
+
+  var priorityQueueNodesInnerHtml = ''
+  helpers.forEach(helpers.frontierNodes(this.graphProblem), function (node) {
+    priorityQueueNodesInnerHtml += templates.renderPriorityQueryNodeToString(
+      this.graphProblem,
+      this.options,
+      node
+    )
+  }, this)
+  this.dom.priorityQueueContainer.innerHTML = priorityQueueNodesInnerHtml
+
+  var unexploredNodesInnerHtml = ''
+  helpers.forEach(helpers.unexploredNodes(this.graphProblem), function (node) {
+    unexploredNodesInnerHtml += templates.renderNodeToString(
+      this.graphProblem,
+      this.options,
+      node
+    )
+  }, this)
+  this.dom.unexploredNodesContainer.innerHTML = unexploredNodesInnerHtml
+
+  var exploredNodesInnerHtml = ''
+  helpers.forEach(helpers.exploredNodes(this.graphProblem), function (node) {
+    exploredNodesInnerHtml += templates.renderNodeToString(
+      this.graphProblem,
+      this.options,
+      node
+    )
+  }, this)
+  this.dom.exploredNodesContainer.innerHTML = exploredNodesInnerHtml
 }
 AStarSearchRenderer.helpers = {
   /**
@@ -225,6 +281,30 @@ AStarSearchRenderer.helpers = {
         cb.call(that, iterable[key], key)
       }
     }
+  }
+}
+AStarSearchRenderer.templates = {
+  renderNodeToString: function (graphProblem, options, node) {
+    var helpers = AStarSearchRenderer.helpers
+    var backgroundObject = helpers.getNodeStyle(graphProblem, options, node)
+    var backgroundColor = backgroundObject['backgroundColor']
+    return '<li ' +
+      'style="margin: 16px 16px 0 0; background-color:' + backgroundColor + ' ;"' +
+      'class="graph-node pull-left">' + node.id +
+    '</li>'
+  },
+  renderPriorityQueryNodeToString: function (graphProblem, options, node) {
+    var helpers = AStarSearchRenderer.helpers
+    var backgroundObject = helpers.getNodeStyle(graphProblem, options, node)
+    var backgroundColor = backgroundObject['backgroundColor']
+    return '<tr>' +
+      '<td><span style="background-color:' + backgroundColor + ' ;" ' +
+                'class="graph-node">' + node.id + '</span></td>' +
+      '<td><span>' + node.totalCost + '</span></td>' +
+      '<td><span>' + node.cost + '</span></td>' +
+      '<td><span>' + node.estimatedCost + '</span></td>' +
+      '<td><span>' + node.depth + '</span></td>' +
+    '</tr>'
   }
 }
 

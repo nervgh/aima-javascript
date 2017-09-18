@@ -475,17 +475,17 @@
             <div class="notes">
               <ul type="none">
                 <li>
-                  <l v-bind:style="{backgroundColor: aima.options.nodes.frontier.fill}"
+                  <l id="aStarSearchBox-legendFrontier"
                      class="legend-item"></l>
-                  Nodes waiting to be expanded
+                  Frontier Nodes
                 </li>
                 <li>
-                  <l v-bind:style="{backgroundColor: aima.options.nodes.next.fill}"
+                  <l id="aStarSearchBox-legendNext"
                      class="legend-item"></l>
                   Node to be expanded next from the queue
                 </li>
                 <li>
-                  <l v-bind:style="{backgroundColor: aima.options.nodes.explored.fill}"
+                  <l id="aStarSearchBox-legendExplored"
                      class="legend-item"></l>
                   Expanded Nodes
                 </li>
@@ -494,14 +494,7 @@
             <div class="row explanation-area">
               <div class="explanation-container" style="margin-top: 0; min-height: auto;">
                 <h4 class="text-center">Path</h4>
-                <ul class="graph-nodes-container">
-                  <li v-for="node in getPathNodes(aima.graphProblem)"
-                      v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                      class="graph-node pull-left"
-                      style="margin: 16px 16px 0 0;"
-                      v-text="node.id">
-                  </li>
-                </ul>
+                <ul id="aStarSearchBox-pathContainer" class="graph-nodes-container"></ul>
               </div>
               <h4 class="text-center">Priority Queue (Frontier)</h4>
               <table class="table">
@@ -514,42 +507,18 @@
                   <th>Depth</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr v-for="node in frontierNodes(aima.graphProblem)">
-                  <td><span v-text="node.id"
-                            v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                            class="graph-node"></span></td>
-                  <td><span v-text="node.totalCost"></span></td>
-                  <td><span v-text="node.cost"></span></td>
-                  <td><span v-text="node.estimatedCost"></span></td>
-                  <td><span v-text="node.depth"></span></td>
-                </tr>
-                </tbody>
+                <tbody id="aStarSearchBox-priorityQueueContainer"></tbody>
               </table>
               <div class="col-xs-6">
                 <div class="explanation-container">
                   <h4 class="text-center">Unexplored Nodes</h4>
-                  <ul class="graph-nodes-container">
-                    <li v-for="node in unexploredNodes(aima.graphProblem)"
-                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                        class="graph-node pull-left"
-                        style="margin: 16px 16px 0 0;">
-                      <span v-text="node.text"></span>
-                    </li>
-                  </ul>
+                  <ul id="aStarSearchBox-unexploredNodesContainer" class="graph-nodes-container"></ul>
                 </div>
               </div>
               <div class="col-xs-6">
                 <div class="explanation-container">
                   <h4 class="text-center">Explored Nodes</h4>
-                  <ul class="graph-nodes-container">
-                    <li v-for="node in exploredNodes(aima.graphProblem)"
-                        v-bind:style="getNodeStyle(aima.graphProblem, aima.options, node)"
-                        class="graph-node pull-left"
-                        style="margin: 16px 16px 0 0;">
-                      <span v-text="node.text"></span>
-                    </li>
-                  </ul>
+                  <ul id="aStarSearchBox-exploredNodesContainer" class="graph-nodes-container"></ul>
                 </div>
               </div>
             </div>
