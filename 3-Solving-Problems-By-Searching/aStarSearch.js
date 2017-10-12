@@ -1,4 +1,4 @@
-// Standard Code Style -- https://github.com/standard/standard
+
 // ESLint Config -- http://eslint.org/docs/user-guide/configuring
 
 /* eslint-env browser */

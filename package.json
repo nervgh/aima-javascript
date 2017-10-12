@@ -4,7 +4,6 @@
   "description": "Javascript visualization of algorithms from Norvig And Russell's \"Artificial Intelligence - A Modern Approach 4th Edition.\"",
   "main": "index.js",
   "scripts": {
-    "autoformat": "prettier --write 3-Solving-Problems-By-Searching/aStarSearch.js 3-Solving-Problems-By-Searching/c_aStarSearch.js",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
